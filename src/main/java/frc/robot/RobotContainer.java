@@ -78,7 +78,13 @@ public class RobotContainer {
 
   );
 
+
   private Command moveArm = new RunCommand(
+  
+  // move the lift up and down with right and left triggers, respectively
+  // checking for whether hook is engaged, 
+    // if it is: run the climb sequential command group
+    // if it is not: run an empty instant command group (does nothing)
     () -> climbAuto.move(xbox.getRawAxis(kRightTrigger.value) - xbox.getRawAxis(kLeftTrigger.value)), climbAuto)
     .andThen(new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged));
 
@@ -86,6 +92,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    climbAuto.setDefaultCommand(moveArm);
+    
 
   }
 

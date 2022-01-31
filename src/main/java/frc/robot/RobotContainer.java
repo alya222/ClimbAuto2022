@@ -61,7 +61,7 @@ public class RobotContainer {
     // moves lift down at 40% speed until lift limit switch is pressed
     new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
     
-  /**sequential command is repeated**/
+  /** sequential command is repeated **/
 
     // sets arm piston to true, reaching arm out fully
     new InstantCommand(()-> climbAuto.reaching(true)),
@@ -74,10 +74,8 @@ public class RobotContainer {
 
     // moves lift down at 40% speed until lift limit switch is pressed
     new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged)
-    
 
   );
-
 
   private Command moveArm = new RunCommand(
   
@@ -93,9 +91,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    // run climbAuto as the default command
     climbAuto.setDefaultCommand(moveArm);
-    
-
   }
 
   /**
@@ -105,8 +102,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
-    
     
   }
 

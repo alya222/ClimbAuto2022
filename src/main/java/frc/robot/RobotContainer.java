@@ -37,25 +37,44 @@ import static frc.robot.Constants.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
+  // define ClimAuto subsystem
   private final ClimbAuto climbAuto = new ClimbAuto();
 
+  // define xbox controller
   private XboxController xbox = new XboxController(kXboxPort);
 
   //auto climb with limit switches (version 1.0)
+
   private SequentialCommandGroup climb = new SequentialCommandGroup(
-    new InstantCommand(()-> climbAuto.reaching(true)),
-    //could use encoders and a PID loop for smoother movements
-    new RunCommand(() -> climbAuto.move(0.4)).withInterrupt(climbAuto::isLiftExtended),
-    new InstantCommand(()-> climbAuto.reaching(false)),
-    new RunCommand(() -> climbAuto.move(-0.4)).withInterrupt(climbAuto::isLiftExtended),
     
-    new WaitUntilCommand(climbAuto::isHookEngaged),
-    
-    //sequential command is repeated
+    // sets arm piston to true, reaching arm out fully
     new InstantCommand(()-> climbAuto.reaching(true)),
-    new RunCommand(() -> climbAuto.move(0.4)).withInterrupt(climbAuto::isLiftExtended),
+    
+    /*could use encoders and a PID loop for smoother movements on lift*/
+    
+    // moves lift up at 40% speed until lift limit switch is hit
+    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+
+    // sets piston to false, moving arm back fully until it is vertical
     new InstantCommand(()-> climbAuto.reaching(false)),
-    new RunCommand(() -> climbAuto.move(-0.4)).withInterrupt(climbAuto::isLiftExtended)
+
+    // moves lift down at 40% speed until lift limit switch is pressed
+    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
+    
+  /**sequential command is repeated**/
+
+    // sets arm piston to true, reaching arm out fully
+    new InstantCommand(()-> climbAuto.reaching(true)),
+        
+    // moves lift up at 40% speed until lift limit switch is hit
+    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+
+    // sets piston to false, moving arm back fully until it is vertical
+    new InstantCommand(()-> climbAuto.reaching(false)),
+
+    // moves lift down at 40% speed until lift limit switch is pressed
+    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged)
+    
 
   );
 
@@ -67,8 +86,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
-    
 
   }
 

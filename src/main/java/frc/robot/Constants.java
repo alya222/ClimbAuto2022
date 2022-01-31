@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+// import types of phneumatics
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
@@ -24,7 +25,13 @@ public final class Constants {
 
     // assign port number to compressor
     public static final PneumaticsModuleType compressorModule = PneumaticsModuleType.CTREPCM;
-    // assign port number to 
-    public static final int leftPoseMoverPort = 3;
+    
+    // assign port number to arm piston
+    public static final int armMoverPort = 3;
+
+    // creates variables for the lift speed moving up and down
+    public static final double liftUpSpeed = 0.4;
+    public static final double liftDownSpeed = -0.4;
+
 
 }

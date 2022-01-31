@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+// import information on CANSparkMAx motor controller
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+// import information from other files
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -14,47 +16,52 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
 
-import java.util.function.BooleanSupplier;
-
 public class ClimbAuto extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new ClimAuto subsystem */
  
-  //add a limit switch
-  
+  // add a limit switch on stationary hook
   DigitalInput hangSwitch = new DigitalInput(0);
+  
+  // add a limit switch on lift (to detect full extension)
   DigitalInput liftSwitch = new DigitalInput(1);
 
+  // add a compressor
   private Compressor airow = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
-  private Solenoid piston = new Solenoid(compressorModule, leftPoseMoverPort);
+  // add a piston for moving arm
+  private Solenoid piston = new Solenoid(compressorModule, armMoverPort);
 
   public ClimbAuto() {
 
   }
 
+  // add a motor for lift
   private CANSparkMax lift = new CANSparkMax(liftPort, MotorType.kBrushless);
 
+  // add a method that moves lift up
   public void move(double speed) {
     lift.set(speed);
-
   }
 
+  // method checks whether stationary hook limit switch is pressed
   public boolean isHookEngaged() {
     return hangSwitch.get();
   }
 
+  // method checks whether higher lift limit switch is pressed
   public boolean isLiftExtended() {
     return liftSwitch.get();
   }
 
+  // check if arm is fully reached backwards (if piston value = true)
   public boolean isReaching() {
     return piston.get();
   }
 
+  // method makes piston extend (makes the arm reach)
   public void reaching(boolean pistonReach) {
     piston.set(pistonReach);
   }
-
 
 
   @Override

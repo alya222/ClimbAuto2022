@@ -4,8 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 // import information on CANSparkMAx motor controller
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 // import information from other files
@@ -30,13 +35,28 @@ public class ClimbAuto extends SubsystemBase {
 
   // add a piston for moving arm
   private Solenoid piston = new Solenoid(compressorModule, armMoverPort);
-
-  public ClimbAuto() {
-
-  }
-
+  
   // add a motor for lift
   private CANSparkMax lift = new CANSparkMax(liftPort, MotorType.kBrushless);
+
+  private RelativeEncoder liftEncoder = lift.getEncoder();
+  
+  private SparkMaxPIDController liftController = lift.getPIDController();
+
+
+
+  public ClimbAuto () {
+
+    //liftEncoder.setPositionConversionFactor(20);
+
+    // Spark PID Stuff
+    liftController.setP(0.01);
+    liftController.setI(0);
+    liftController.setD(0); 
+    liftController.setFF(0);
+
+    //launcherEncoder.setVelocityConversionFactor(factor)
+  }
 
   // add a method that moves lift up
   public void move(double speed) {
@@ -63,6 +83,10 @@ public class ClimbAuto extends SubsystemBase {
     piston.set(pistonReach);
   }
 
+  public void setSpeedLift (double setPoint) {
+    liftController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    
+  }
 
   @Override
   public void periodic() {

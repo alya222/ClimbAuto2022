@@ -84,7 +84,7 @@ public class RobotContainer {
     // if it is: run the climb sequential command group
     // if it is not: run an empty instant command group (does nothing)
     () -> climbAuto.move(xbox.getRawAxis(kRightTrigger.value) - xbox.getRawAxis(kLeftTrigger.value)), climbAuto)
-    .andThen(new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged));
+    .alongWith(new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

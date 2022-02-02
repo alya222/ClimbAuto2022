@@ -47,7 +47,7 @@ public class ClimbAuto extends SubsystemBase {
 
   public ClimbAuto () {
 
-    //liftEncoder.setPositionConversionFactor(20);
+    //liftEncoder.setPositionConversionFactor(5);
 
     // Spark PID Stuff
     liftController.setP(0.01);

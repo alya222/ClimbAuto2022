@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public final class Constants {
     
     // assign port number to lift motor
-    public static final int liftPort = 0;
+    public static final int liftPort = 5;
 
     // Xbox controller port
 	public static final int kXboxPort = 0;
@@ -27,7 +27,7 @@ public final class Constants {
     public static final PneumaticsModuleType compressorModule = PneumaticsModuleType.CTREPCM;
     
     // assign port number to arm piston
-    public static final int armMoverPort = 3;
+    public static final int armMoverPort = 0;
 
     // creates variables for the lift speed moving up and down
     public static final double liftUpSpeed = 0.4;

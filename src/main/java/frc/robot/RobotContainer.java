@@ -54,12 +54,18 @@ public class RobotContainer {
     
     // moves lift up at 40% speed until lift limit switch is hit
     new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+        
+    //stops the motor
+    new InstantCommand(()-> climbAuto.move(0)),
 
     // sets piston to false, moving arm back fully until it is vertical
     new InstantCommand(()-> climbAuto.reaching(false)),
 
     // moves lift down at 40% speed until lift limit switch is pressed
     new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
+
+    //stops the motor
+    new InstantCommand(()-> climbAuto.move(0)),
     
   /** sequential command is repeated **/
 
@@ -67,13 +73,19 @@ public class RobotContainer {
     new InstantCommand(()-> climbAuto.reaching(true)),
         
     // moves lift up at 40% speed until lift limit switch is hit
-    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),    
+    
+    //stops the motor
+    new InstantCommand(()-> climbAuto.move(0)),
 
     // sets piston to false, moving arm back fully until it is vertical
     new InstantCommand(()-> climbAuto.reaching(false)),
 
     // moves lift down at 40% speed until lift limit switch is pressed
-    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged)
+    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
+
+    //stops the motor
+    new InstantCommand(()-> climbAuto.move(0))
 
   );
 
@@ -103,7 +115,8 @@ public class RobotContainer {
     // if it is: run the climb sequential command group
     // if it is not: run an empty instant command group (does nothing)
     new JoystickButton(xbox, kA.value)
-    .whenPressed(new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged));
+    .whenPressed(/*new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged)*/
+    climb);
   }
 
   /**

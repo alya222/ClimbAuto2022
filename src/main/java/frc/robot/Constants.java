@@ -33,5 +33,7 @@ public final class Constants {
     public static final double liftUpSpeed = 0.4;
     public static final double liftDownSpeed = -0.4;
 
+    public static final double liftRotations = 1;
+
 
 }

@@ -13,6 +13,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 // import information from other files
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -37,13 +38,14 @@ public class ClimbAuto extends SubsystemBase {
   private Solenoid piston = new Solenoid(compressorModule, armMoverPort);
   
   // add a motor for lift
-  private CANSparkMax lift = new CANSparkMax(liftPort, MotorType.kBrushless);
+  private CANSparkMax liftMotor = new CANSparkMax(liftPort, MotorType.kBrushless);
 
-  private RelativeEncoder liftEncoder = lift.getEncoder();
+  private RelativeEncoder liftEncoder = liftMotor.getEncoder();
   
-  private SparkMaxPIDController liftController = lift.getPIDController();
+  private SparkMaxPIDController liftController = liftMotor.getPIDController();
 
-
+  private ElevatorFeedforward elevatorFeedForward
+  = new ElevatorFeedforward(0, 0, 0);
 
   public ClimbAuto () {
 
@@ -60,7 +62,7 @@ public class ClimbAuto extends SubsystemBase {
 
   // add a method that moves lift up
   public void move(double speed) {
-    lift.set(speed);
+    liftMotor.set(speed);
   }
 
   // method checks whether stationary hook limit switch is pressed
@@ -87,6 +89,18 @@ public class ClimbAuto extends SubsystemBase {
     liftController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
     
   }
+
+  public void ElevatorFeedforward (double liftSpeed) {
+     // liftMotor.setVoltage(elevatorFeedForward.(liftSpeed))
+      
+  }
+
+  public void liftPID (double rotations) {
+    
+    liftController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+    
+  }
+
 
   @Override
   public void periodic() {

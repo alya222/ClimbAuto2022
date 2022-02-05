@@ -47,33 +47,36 @@ public class RobotContainer {
 
   private SequentialCommandGroup climb = new SequentialCommandGroup(
     
-    // sets arm piston to true, reaching arm out fully
-    new InstantCommand(()-> climbAuto.reaching(true)),
-    
-    /*could use encoders and a PID loop for smoother movements on lift*/
-    
-    // moves lift up at 40% speed until lift limit switch is hit
-    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+  // sets arm piston to true, reaching arm out fully
+  new InstantCommand(()-> climbAuto.reaching(true)),
+  
+  /*could use encoders and a PID loop for smoother movements on lift*/
+  
+  // moves lift up at 40% speed until lift limit switch is hit
+  new RunCommand(() -> climbAuto.liftPID(liftRotations)),
 
-    // sets piston to false, moving arm back fully until it is vertical
-    new InstantCommand(()-> climbAuto.reaching(false)),
+  // sets piston to false, moving arm back fully until it is vertical
+  new InstantCommand(()-> climbAuto.reaching(false)),
 
-    // moves lift down at 40% speed until lift limit switch is pressed
-    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
-    
-  /** sequential command is repeated **/
+  // moves lift down at 40% speed until lift limit switch is pressed
+  new RunCommand(() -> climbAuto.liftPID(-liftRotations)),
+  
+/** sequential command is repeated **/
 
-    // sets arm piston to true, reaching arm out fully
-    new InstantCommand(()-> climbAuto.reaching(true)),
-        
-    // moves lift up at 40% speed until lift limit switch is hit
-    new RunCommand(() -> climbAuto.move(liftUpSpeed)).withInterrupt(climbAuto::isLiftExtended),
+  // sets arm piston to true, reaching arm out fully
+  new InstantCommand(()-> climbAuto.reaching(true)),
+      
+  // moves lift up at 40% speed until lift limit switch is hit
+  new RunCommand(() -> climbAuto.liftPID(liftRotations)).withInterrupt(climbAuto::isLiftExtended),
 
-    // sets piston to false, moving arm back fully until it is vertical
-    new InstantCommand(()-> climbAuto.reaching(false)),
+  // stops lift from extending
+  new InstantCommand(() -> climbAuto.move(0)),
 
-    // moves lift down at 40% speed until lift limit switch is pressed
-    new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged)
+  // sets piston to false, moving arm back fully until it is vertical
+  new InstantCommand(()-> climbAuto.reaching(false)),
+
+  // moves lift down at 40% speed until lift limit switch is pressed
+  new RunCommand(() -> climbAuto.liftPID(-liftRotations))
 
   );
 
@@ -103,7 +106,7 @@ public class RobotContainer {
     // if it is: run the climb sequential command group
     // if it is not: run an empty instant command group (does nothing)
     new JoystickButton(xbox, kA.value)
-    .whenPressed(new ConditionalCommand(climb, new InstantCommand(), climbAuto::isHookEngaged));
+    .whenPressed(climb);
   }
 
   /**

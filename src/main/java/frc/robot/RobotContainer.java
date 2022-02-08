@@ -37,7 +37,7 @@ import static frc.robot.Constants.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
-  // define ClimAuto subsystem
+  // define ClimbAuto subsystem
   private final ClimbAuto climbAuto = new ClimbAuto();
 
   // define xbox controller
@@ -59,7 +59,9 @@ public class RobotContainer {
   new InstantCommand(()-> climbAuto.reaching(false)),
 
   // moves lift down at 40% speed until lift limit switch is pressed
-  new RunCommand(() -> climbAuto.liftPID(-liftRotations)),
+  new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
+
+  new InstantCommand(() -> climbAuto.move(0)),
   
 /** sequential command is repeated **/
 
@@ -67,16 +69,15 @@ public class RobotContainer {
   new InstantCommand(()-> climbAuto.reaching(true)),
       
   // moves lift up at 40% speed until lift limit switch is hit
-  new RunCommand(() -> climbAuto.liftPID(liftRotations)).withInterrupt(climbAuto::isLiftExtended),
-
-  // stops lift from extending
-  new InstantCommand(() -> climbAuto.move(0)),
+  new RunCommand(() -> climbAuto.liftPID(liftRotations)),
 
   // sets piston to false, moving arm back fully until it is vertical
   new InstantCommand(()-> climbAuto.reaching(false)),
 
   // moves lift down at 40% speed until lift limit switch is pressed
-  new RunCommand(() -> climbAuto.liftPID(-liftRotations))
+  new RunCommand(() -> climbAuto.move(liftDownSpeed)).withInterrupt(climbAuto::isHookEngaged),
+
+  new InstantCommand(() -> climbAuto.move(0))
 
   );
 
